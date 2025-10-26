@@ -1,0 +1,8 @@
+streamlit
+langchain
+langchain-community
+langchain-mistralai
+sentence-transformers
+chromadb
+beautifulsoup4
+requests
