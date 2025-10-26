@@ -24,23 +24,23 @@ if st.button("Ingest Webpage"):
         st.warning("Please enter a valid URL.")
     else:
         with st.spinner("Fetching and embedding webpage content..."):
-            # 1️⃣ Load and process
+            # Load and process
             loader = WebBaseLoader(url)
             docs = loader.load()
             splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
             chunks = splitter.split_documents(docs)
 
-            # 2️⃣ Create embeddings
+            # Create embeddings
             embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-V2")
 
-            # 3️⃣ Create Chroma DB
+            # Create Chroma DB
             db = Chroma.from_documents(chunks, embeddings, persist_directory="./chroma_store")
             db.persist()
 
-            # 4️⃣ Initialize Mistral LLM
+            # Initialize Mistral LLM
             llm = ChatMistralAI(model="open-mistral-7b", api_key=mistral_key)
 
-            # 5️⃣ Create QA chain and store it
+            # Create QA chain and store it
             st.session_state.qa_chain = RetrievalQA.from_chain_type(
                 llm=llm,
                 chain_type="stuff",
